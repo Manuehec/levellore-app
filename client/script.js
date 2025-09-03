@@ -31,6 +31,12 @@ const loginUsername = document.getElementById('login-username');
 const loginPassword = document.getElementById('login-password');
 const registerUsername = document.getElementById('register-username');
 const registerPassword = document.getElementById('register-password');
+// NEW: confirm password + eye toggles
+const registerPasswordConfirm = document.getElementById('register-password-confirm');
+const toggleLoginPassword = document.getElementById('toggle-login-password');
+const toggleRegisterPassword = document.getElementById('toggle-register-password');
+const toggleRegisterPasswordConfirm = document.getElementById('toggle-register-password-confirm');
+
 const loginBtn = document.getElementById('login-btn');
 const registerBtn = document.getElementById('register-btn');
 const logoutBtn = document.getElementById('logout-btn');
@@ -77,7 +83,8 @@ const chatInput = document.getElementById('chat-input');
 const sendBtn = document.getElementById('send-btn');
 
 // Footer
-document.getElementById('year').textContent = new Date().getFullYear();
+const yearEl = document.getElementById('year');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 // Quiz questions (SpongeBob trivia)
 const quizQuestions = [
@@ -152,28 +159,40 @@ const quizQuestions = [
 let currentUser = null;
 let chatPoller = null;
 
-// Default avatar (coloured square) used when user has not uploaded a profile picture.
+// Default avatar (coloured square)
 const DEFAULT_AVATAR = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAT0lEQVR4nO3OMQHAIADAMJh/A3hCFAb29IIjUZA51h7v+W4H/mkVWoVWoVVoFVqFVqFVaBVahVahVWgVWoVWoVVoFVqFVqFVaBVahVahVRz/7AHJNzgsxgAAAABJRU5ErkJggg==';
 
-// Show UI for unauthenticated visitors. Hides user-specific sections and displays the login-open button.
+// Helper: attach eye toggle to a password input
+function attachPasswordToggle(toggleBtn, inputEl) {
+  if (!toggleBtn || !inputEl) return;
+  toggleBtn.addEventListener('click', () => {
+    const isHidden = inputEl.type === 'password';
+    inputEl.type = isHidden ? 'text' : 'password';
+    // swap icon
+    toggleBtn.textContent = isHidden ? '🙈' : '👁️';
+  });
+}
+
+// Attach eye toggles (safe even if some elements are missing)
+attachPasswordToggle(toggleLoginPassword, loginPassword);
+attachPasswordToggle(toggleRegisterPassword, registerPassword);
+attachPasswordToggle(toggleRegisterPasswordConfirm, registerPasswordConfirm);
+
+// Show UI for unauthenticated visitors
 function showGuestUI() {
-  // Hide login overlay
   loginSection.style.display = 'none';
-  // Ensure main section is visible so visitors see the hero
   mainSection.style.display = 'block';
-  // Hide user bar, quiz and chat for unauthenticated users
   if (userBar) userBar.style.display = 'none';
   if (quizSectionEl) quizSectionEl.style.display = 'none';
   if (chatSectionEl) chatSectionEl.style.display = 'none';
-  // Reset generic hero text
   heroHeading.textContent = 'Hello!';
-  // Show login open button
   if (loginOpenBtn) loginOpenBtn.style.display = 'inline-block';
 }
 
 // Event listeners for login/register
 loginBtn.addEventListener('click', async () => {
   loginMessage.textContent = '';
+  loginMessage.style.color = '#e74c3c';
   const username = loginUsername.value.trim();
   const password = loginPassword.value;
   if (!username || !password) {
@@ -185,19 +204,15 @@ loginBtn.addEventListener('click', async () => {
       method: 'POST',
       body: JSON.stringify({ username, password })
     });
-    // Persist token and optionally remember credentials based on remember-me checkbox
+    // Persist token and optionally remember credentials
     if (rememberMeCheckbox && rememberMeCheckbox.checked) {
-      // Store token persistently and clear any session token
       localStorage.setItem('token', data.token);
       sessionStorage.removeItem('token');
-      // Remember username and password for future prefill
       localStorage.setItem('rememberUsername', username);
       localStorage.setItem('rememberPassword', password);
     } else {
-      // Store token only for this session
       sessionStorage.setItem('token', data.token);
       localStorage.removeItem('token');
-      // Clear remembered credentials when not selected
       localStorage.removeItem('rememberUsername');
       localStorage.removeItem('rememberPassword');
     }
@@ -214,10 +229,17 @@ loginBtn.addEventListener('click', async () => {
 
 registerBtn.addEventListener('click', async () => {
   loginMessage.textContent = '';
+  loginMessage.style.color = '#e74c3c';
   const username = registerUsername.value.trim();
   const password = registerPassword.value;
+  const confirm = registerPasswordConfirm ? registerPasswordConfirm.value : '';
   if (!username || !password) {
     loginMessage.textContent = 'Please choose a username and password.';
+    return;
+  }
+  // NEW: require confirmation match when confirm field exists
+  if (registerPasswordConfirm && password !== confirm) {
+    loginMessage.textContent = 'Passwords do not match.';
     return;
   }
   try {
@@ -227,9 +249,9 @@ registerBtn.addEventListener('click', async () => {
     });
     loginMessage.style.color = 'green';
     loginMessage.textContent = 'Account created! You can now log in.';
-    // Clear fields
     registerUsername.value = '';
     registerPassword.value = '';
+    if (registerPasswordConfirm) registerPasswordConfirm.value = '';
   } catch (err) {
     if (err.json) {
       const msg = await err.json().catch(() => ({}));
@@ -241,16 +263,12 @@ registerBtn.addEventListener('click', async () => {
 });
 
 logoutBtn.addEventListener('click', () => {
-  // On logout, remove only session token so that persistent tokens remain for remember-me
   sessionStorage.removeItem('token');
   currentUser = null;
-  // Clear chat poller
   if (chatPoller) clearInterval(chatPoller);
-  // Reset UI to guest mode
   showGuestUI();
   loginMessage.textContent = '';
   loginMessage.style.color = '#e74c3c';
-  // Prepopulate login fields with remembered credentials if they exist
   const rememberedUsername = localStorage.getItem('rememberUsername');
   const rememberedPassword = localStorage.getItem('rememberPassword');
   loginUsername.value = rememberedUsername || '';
@@ -270,7 +288,6 @@ avatarInput.addEventListener('change', async (e) => {
         body: JSON.stringify({ image: base64 })
       });
       profilePicEl.src = data.profilePic;
-      // Persist profile picture on currentUser so it doesn’t reset when XP updates
       if (currentUser) {
         currentUser.profilePic = data.profilePic;
       }
@@ -324,14 +341,12 @@ async function loadChat() {
 }
 
 function renderChat(messages) {
-  // Sort messages by timestamp ascending
   const sorted = messages.sort((a, b) => a.timestamp - b.timestamp);
   chatMessagesEl.innerHTML = '';
   sorted.forEach((msg) => {
     const msgDiv = document.createElement('div');
     msgDiv.className = 'chat-message';
     const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    // If a profile picture is provided for this message, include it
     let avatarHtml = '';
     if (msg.profilePic) {
       avatarHtml = `<img src="${msg.profilePic}" class="chat-avatar" alt=""> `;
@@ -355,9 +370,7 @@ function escapeHtml(text) {
 
 // Quiz logic
 function loadDailyQuiz() {
-  // Determine question by day-of-year
   const now = new Date();
-  // Calculate day-of-year (0-based). Use Jan 1 as starting point to avoid timezone issues
   const start = new Date(now.getFullYear(), 0, 1);
   const diff = now - start;
   const oneDay = 1000 * 60 * 60 * 24;
@@ -379,12 +392,10 @@ function loadDailyQuiz() {
 }
 
 async function answerQuiz(q, chosenIndex, btn) {
-  // Disable all options
   optionsEl.querySelectorAll('button').forEach((b) => (b.disabled = true));
   const correct = chosenIndex === q.answer;
   feedbackEl.textContent = correct ? 'Correct!' : 'Wrong!';
   feedbackEl.style.color = correct ? '#2ecc71' : '#e74c3c';
-  // Award XP only once per day via API
   try {
     const res = await apiFetch('/api/xp/quiz', { method: 'POST' });
     if (res.awarded) {
@@ -404,7 +415,6 @@ function updateUserInfo() {
   profilePicEl.src = currentUser.profilePic || DEFAULT_AVATAR;
   heroHeading.textContent = `Hello, ${currentUser.username}!`;
 
-  // Update XP bar fill based on progress toward next level
   const progress = computeLevelClient(currentUser.xp);
   const percent = (progress.xpRemaining / progress.nextThreshold) * 100;
   const xpFill = document.getElementById('xp-fill');
@@ -413,7 +423,6 @@ function updateUserInfo() {
   }
 }
 
-// Compute level and XP thresholds on the client to drive the XP bar
 function computeLevelClient(totalXP) {
   const BASE_XP = 100;
   let level = 1;
@@ -432,25 +441,19 @@ async function loadUser() {
   try {
     const data = await apiFetch('/api/user');
     currentUser = data;
-    // Determine if the user has unclaimed daily login XP and show the daily login button
     const today = new Date().toISOString().slice(0, 10);
     if (dailyLoginBtn) {
       if (currentUser.lastLoginDate !== today) {
-        // Show the button if daily XP not yet claimed
         dailyLoginBtn.style.display = 'block';
         dailyLoginBtn.disabled = false;
       } else {
-        // Hide the button if already claimed
         dailyLoginBtn.style.display = 'none';
       }
     }
-    // Show user‑specific sections and hide login overlay
     loginSection.style.display = 'none';
     mainSection.style.display = 'block';
-    // Show user bar and chat
     if (userBar) userBar.style.display = 'flex';
     if (chatSectionEl) chatSectionEl.style.display = 'block';
-    // Display quiz only if the user hasn't answered today's question
     if (quizSectionEl) {
       if (currentUser.lastQuizDate === today) {
         quizSectionEl.style.display = 'none';
@@ -459,13 +462,11 @@ async function loadUser() {
         loadDailyQuiz();
       }
     }
-    // Hide login button
     if (loginOpenBtn) loginOpenBtn.style.display = 'none';
     updateUserInfo();
     await loadChat();
     startChatPolling();
   } catch (err) {
-    // Token invalid; stay at login
     localStorage.removeItem('token');
     showGuestUI();
   }
@@ -475,10 +476,8 @@ async function loadUser() {
 document.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('token') || sessionStorage.getItem('token');
   if (token) {
-    // If there is a stored token (persistent or session), attempt to load user immediately
     loadUser();
   } else {
-    // Show guest UI when no token and prefill login form if credentials were remembered
     showGuestUI();
     const remUser = localStorage.getItem('rememberUsername');
     const remPass = localStorage.getItem('rememberPassword');
@@ -487,6 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
       loginPassword.value = remPass;
     }
   }
+
   // Event listener for opening login modal
   if (loginOpenBtn) {
     loginOpenBtn.addEventListener('click', () => {
@@ -499,12 +499,10 @@ document.addEventListener('DOMContentLoaded', () => {
     leaderboardBtn.addEventListener('click', async () => {
       try {
         const data = await apiFetch('/api/leaderboard');
-        // Clear container before populating
         leaderboardContainer.innerHTML = '';
         data.forEach((entry, index) => {
           const row = document.createElement('div');
           row.className = 'leaderboard-row';
-          // Avatar
           if (entry.profilePic) {
             const img = document.createElement('img');
             img.src = entry.profilePic;
@@ -529,7 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Imprint popup logic
+  // Imprint popup logic (IDs must match index.html)
   if (imprintBtn && imprintSection && closeImprintBtn) {
     imprintBtn.addEventListener('click', (e) => {
       e.preventDefault();
