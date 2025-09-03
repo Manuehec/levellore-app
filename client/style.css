@@ -670,3 +670,32 @@ padding: 20px;
 .error-message {
 color: #e74c3c; /* red */
 }
+/* === FIX: eye toggle should NOT inherit big .login-container button styles ===
+   Paste this AT THE END of style.css
+*/
+
+/* Make the eye button ignore the generic .login-container button styles */
+.login-container button.toggle-password {
+  all: unset;                              /* wipe inherited button rules */
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;                             /* small hit area */
+  height: 28px;
+  cursor: pointer;
+  font-size: 18px;                         /* eye size */
+  line-height: 1;
+  color: inherit;
+}
+.login-container button.toggle-password:focus {
+  outline: 2px solid var(--secondary);
+  outline-offset: 2px;
+}
+
+/* Ensure the input has space for the eye */
+.password-field { position: relative; }
+.password-input { padding-right: 44px; }
