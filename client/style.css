@@ -1,0 +1,355 @@
+/*
+ * Styles for LevelLore community site with backend integration. Reuses
+ * colour palette and components from earlier versions.
+ */
+
+:root {
+  --primary: #0099cc;
+  --secondary: #ffd700;
+  --accent: #ff7043;
+  --dark: #013243;
+  --light: #f5fbff;
+  --font-family: 'Comic Sans MS', 'Trebuchet MS', 'Arial', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--light);
+  color: var(--dark);
+}
+
+header {
+  background-color: var(--primary);
+  color: #fff;
+  padding: 20px 0;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.logo {
+  margin: 0;
+  font-size: 2.4rem;
+  font-weight: bold;
+}
+
+.logo span {
+  color: var(--secondary);
+}
+
+.tagline {
+  margin-top: 8px;
+  font-size: 1.1rem;
+  color: var(--light);
+}
+
+/* Login section */
+.login-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 10px;
+}
+
+.login-container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-container h2 {
+  margin-top: 0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group h3 {
+  margin-bottom: 10px;
+  color: var(--primary);
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 1rem;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-container button:hover {
+  background-color: var(--accent);
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 20px 0;
+}
+
+/* User bar */
+.user-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 10%;
+  background-color: var(--primary);
+  color: #fff;
+  flex-wrap: wrap;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  margin-right: auto;
+}
+
+.user-details .username {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.user-details .level,
+.user-details .xp {
+  font-size: 0.9rem;
+}
+
+input#avatar-input {
+  margin-right: 10px;
+  color: #fff;
+}
+
+.logout-button {
+  background-color: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.logout-button:hover {
+  background-color: #d9534f;
+}
+
+/* Hero section */
+/*
+ * Hero section uses a simple gradient to evoke an underwater vibe. The image
+ * from the previous version has been removed to simplify deployment – the
+ * gradient provides a similar colourful look without requiring external
+ * assets. Adjust the colours as desired to better match your brand.
+ */
+.hero {
+  background: linear-gradient(135deg, var(--primary), #004b87);
+  min-height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.overlay {
+  background: rgba(0,0,0,0.45);
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  color: #fff;
+}
+
+.overlay h2 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.overlay p {
+  margin-top: 8px;
+  font-size: 1rem;
+}
+
+/* Quiz section */
+.quiz-section {
+  padding: 40px 10%;
+}
+
+.quiz-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.question {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+}
+
+.options {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.options li {
+  margin-bottom: 10px;
+}
+
+.option-button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--secondary);
+  border: none;
+  border-radius: 5px;
+  color: var(--dark);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.option-button:hover {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+.option-button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: default;
+}
+
+.feedback {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.feedback.correct {
+  color: green;
+}
+
+.feedback.incorrect {
+  color: red;
+}
+
+/* Chat section */
+.chat-section {
+  padding: 40px 10%;
+}
+
+.chat-messages {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 15px;
+  max-width: 600px;
+  margin: 0 auto;
+  height: 250px;
+  overflow-y: auto;
+}
+
+.chat-message {
+  margin-bottom: 10px;
+}
+
+.chat-message .sender {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.chat-input-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#chat-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+  font-size: 1rem;
+}
+
+.send-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  background-color: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.send-button:hover {
+  background-color: var(--accent);
+}
+
+footer {
+  background-color: var(--primary);
+  color: #fff;
+  text-align: center;
+  padding: 15px 0;
+  margin-top: 40px;
+}
+
+@media (max-width: 600px) {
+  .user-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 5%;
+  }
+  .user-details {
+    margin-bottom: 10px;
+  }
+  #avatar-input {
+    margin-bottom: 10px;
+  }
+  .chat-messages,
+  .chat-input-row,
+  .quiz-box {
+    width: 100%;
+  }
+}
