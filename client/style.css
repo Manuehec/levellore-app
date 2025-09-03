@@ -37,6 +37,21 @@
   margin-left: 0.5rem;
 }
 
+/* Impressum button styling in footer. Mimic leaderboard button spacing */
+.impressum-button {
+  margin-left: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--primary);
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+.impressum-button:hover {
+  color: var(--accent);
+}
+
 .close-leaderboard {
   margin-top: 0.5rem;
 }
