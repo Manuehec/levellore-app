@@ -19,8 +19,6 @@ async function apiFetch(endpoint, options = {}) {
   if (!res.ok) {
     throw res;
   }
-  
-
   return res.json();
 }
 
@@ -36,6 +34,12 @@ const loginBtn = document.getElementById('login-btn');
 const registerBtn = document.getElementById('register-btn');
 const logoutBtn = document.getElementById('logout-btn');
 
+// Additional UI elements for improved layout
+const userBar = document.querySelector('.user-bar');
+const quizSectionEl = document.getElementById('quiz');
+const chatSectionEl = document.getElementById('chat');
+const loginOpenBtn = document.getElementById('login-open-btn');
+
 const welcomeNameEl = document.getElementById('welcome-name');
 const levelInfoEl = document.getElementById('level-info');
 const xpInfoEl = document.getElementById('xp-info');
@@ -43,10 +47,6 @@ const profilePicEl = document.getElementById('profile-pic');
 const avatarInput = document.getElementById('avatar-input');
 
 const heroHeading = document.getElementById('hero-heading');
-const userBar = document.querySelector('.user-bar');
-const quizSectionEl = document.getElementById('quiz');
-const chatSectionEl = document.getElementById('chat');
-const loginOpenBtn = document.getElementById('login-open-btn');
 
 // Quiz elements
 const questionEl = document.getElementById('question');
@@ -75,7 +75,7 @@ const quizQuestions = [
   },
   {
     question: 'What is the secret ingredient in the Krabby Patty?',
-    options: ['Kelp', 'Plankton', 'It\u2019s a secret!', 'Mayonnaise'],
+    options: ['Kelp', 'Plankton', 'It’s a secret!', 'Mayonnaise'],
     answer: 2
   },
   {
@@ -137,6 +137,22 @@ let chatPoller = null;
 // Default avatar (coloured square) used when user has not uploaded a profile picture.
 const DEFAULT_AVATAR = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAT0lEQVR4nO3OMQHAIADAMJh/A3hCFAb29IIjUZA51h7v+W4H/mkVWoVWoVVoFVqFVqFVaBVahVahVWgVWoVWoVVoFVqFVqFVaBVahVahVRz/7AHJNzgsxgAAAABJRU5ErkJggg==';
 
+// Show UI for unauthenticated visitors. Hides user-specific sections and displays the login-open button.
+function showGuestUI() {
+  // Hide login overlay
+  loginSection.style.display = 'none';
+  // Ensure main section is visible so visitors see the hero
+  mainSection.style.display = 'block';
+  // Hide user bar, quiz and chat for unauthenticated users
+  if (userBar) userBar.style.display = 'none';
+  if (quizSectionEl) quizSectionEl.style.display = 'none';
+  if (chatSectionEl) chatSectionEl.style.display = 'none';
+  // Reset generic hero text
+  heroHeading.textContent = 'Hello!';
+  // Show login open button
+  if (loginOpenBtn) loginOpenBtn.style.display = 'inline-block';
+}
+
 // Event listeners for login/register
 loginBtn.addEventListener('click', async () => {
   loginMessage.textContent = '';
@@ -196,9 +212,8 @@ logoutBtn.addEventListener('click', () => {
   currentUser = null;
   // Clear chat poller
   if (chatPoller) clearInterval(chatPoller);
-  // Reset UI
-  loginSection.style.display = 'block';
-  mainSection.style.display = 'none';
+  // Reset UI to guest mode
+  showGuestUI();
   loginMessage.textContent = '';
   loginMessage.style.color = '#e74c3c';
   loginUsername.value = '';
@@ -296,7 +311,8 @@ function escapeHtml(text) {
 function loadDailyQuiz() {
   // Determine question by day-of-year
   const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 0);
+  // Calculate day-of-year (0-based). Use Jan 1 as starting point to avoid timezone issues
+  const start = new Date(now.getFullYear(), 0, 1);
   const diff = now - start;
   const oneDay = 1000 * 60 * 60 * 24;
   const dayOfYear = Math.floor(diff / oneDay);
@@ -353,9 +369,15 @@ async function loadUser() {
     // Refresh user data after login XP update
     const updated = await apiFetch('/api/user');
     currentUser = updated;
-    // Show main section
+    // Show user‑specific sections and hide login overlay
     loginSection.style.display = 'none';
     mainSection.style.display = 'block';
+    // Show user bar, quiz and chat
+    if (userBar) userBar.style.display = 'flex';
+    if (quizSectionEl) quizSectionEl.style.display = 'block';
+    if (chatSectionEl) chatSectionEl.style.display = 'block';
+    // Hide login button
+    if (loginOpenBtn) loginOpenBtn.style.display = 'none';
     updateUserInfo();
     loadDailyQuiz();
     await loadChat();
@@ -363,8 +385,7 @@ async function loadUser() {
   } catch (err) {
     // Token invalid; stay at login
     localStorage.removeItem('token');
-    loginSection.style.display = 'block';
-    mainSection.style.display = 'none';
+    showGuestUI();
   }
 }
 
@@ -373,5 +394,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('token');
   if (token) {
     loadUser();
+  }
+  // Show guest UI when no token
+  else {
+    showGuestUI();
+  }
+  // Event listener for opening login modal
+  if (loginOpenBtn) {
+    loginOpenBtn.addEventListener('click', () => {
+      loginSection.style.display = 'flex';
+    });
   }
 });
