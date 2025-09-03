@@ -614,3 +614,59 @@ footer {
     width: 100%;
   }
 }
+/* ==== Neues Impressum Popup ==== */
+.imprint-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;              /* wird per JS eingeblendet */
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.imprint-content {
+  background: #fff;
+  padding: 20px;
+  width: 100%;
+  max-width: 800px;           /* auf großen Bildschirmen max. 800px */
+  max-height: 90vh;           /* nie höher als 90% Bildschirm */
+  overflow-y: auto;           /* Scrollbar, falls Text zu lang */
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  font-size: 1rem;
+  line-height: 1.5;
+  animation: fadeIn 0.3s ease;
+}
+
+.close-imprint-btn {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+.close-imprint-btn:hover {
+  background: #d9534f;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 600px) {
+  .imprint-content {
+    padding: 15px;
+    font-size: 0.95rem;
+  }
+}
