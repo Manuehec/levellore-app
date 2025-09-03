@@ -8,7 +8,8 @@
 
 // Utility: Make a fetch request with optional authentication
 async function apiFetch(endpoint, options = {}) {
-  const token = localStorage.getItem('token');
+  // Support both persistent (localStorage) and session tokens based on remember-me
+  const token = localStorage.getItem('token') || sessionStorage.getItem('token');
   const headers = options.headers || {};
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
@@ -33,6 +34,13 @@ const registerPassword = document.getElementById('register-password');
 const loginBtn = document.getElementById('login-btn');
 const registerBtn = document.getElementById('register-btn');
 const logoutBtn = document.getElementById('logout-btn');
+
+// Leaderboard and remember-me related elements
+const leaderboardBtn = document.getElementById('leaderboard-btn');
+const leaderboardSection = document.getElementById('leaderboard');
+const leaderboardContainer = document.getElementById('leaderboard-container');
+const closeLeaderboardBtn = document.getElementById('close-leaderboard');
+const rememberMeCheckbox = document.getElementById('remember-me');
 
 // Additional UI elements for improved layout
 const userBar = document.querySelector('.user-bar');
@@ -167,7 +175,14 @@ loginBtn.addEventListener('click', async () => {
       method: 'POST',
       body: JSON.stringify({ username, password })
     });
-    localStorage.setItem('token', data.token);
+    // Persist token based on remember-me checkbox
+    if (rememberMeCheckbox && rememberMeCheckbox.checked) {
+      localStorage.setItem('token', data.token);
+      sessionStorage.removeItem('token');
+    } else {
+      sessionStorage.setItem('token', data.token);
+      localStorage.removeItem('token');
+    }
     await loadUser();
   } catch (err) {
     if (err.json) {
@@ -357,6 +372,28 @@ function updateUserInfo() {
   xpInfoEl.textContent = `XP ${currentUser.xp}`;
   profilePicEl.src = currentUser.profilePic || DEFAULT_AVATAR;
   heroHeading.textContent = `Hello, ${currentUser.username}!`;
+
+  // Update XP bar fill based on progress toward next level
+  const progress = computeLevelClient(currentUser.xp);
+  const percent = (progress.xpRemaining / progress.nextThreshold) * 100;
+  const xpFill = document.getElementById('xp-fill');
+  if (xpFill) {
+    xpFill.style.width = `${percent}%`;
+  }
+}
+
+// Compute level and XP thresholds on the client to drive the XP bar
+function computeLevelClient(totalXP) {
+  const BASE_XP = 100;
+  let level = 1;
+  let threshold = BASE_XP;
+  let xp = totalXP;
+  while (xp >= threshold) {
+    xp -= threshold;
+    level++;
+    threshold += BASE_XP;
+  }
+  return { level, xpRemaining: xp, nextThreshold: threshold };
 }
 
 // Load user data, update UI and start chat & quiz
@@ -391,7 +428,7 @@ async function loadUser() {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token') || sessionStorage.getItem('token');
   if (token) {
     loadUser();
   }
@@ -403,6 +440,29 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loginOpenBtn) {
     loginOpenBtn.addEventListener('click', () => {
       loginSection.style.display = 'flex';
+    });
+  }
+
+  // Leaderboard button logic
+  if (leaderboardBtn && leaderboardSection && leaderboardContainer) {
+    leaderboardBtn.addEventListener('click', async () => {
+      try {
+        const data = await apiFetch('/api/leaderboard');
+        leaderboardContainer.innerHTML = '';
+        data.forEach((entry, index) => {
+          const div = document.createElement('div');
+          div.textContent = `${index + 1}. ${entry.username} – Lv.${entry.level} (${entry.xp} XP)`;
+          leaderboardContainer.appendChild(div);
+        });
+        leaderboardSection.style.display = 'block';
+      } catch (err) {
+        console.error('Failed to load leaderboard');
+      }
+    });
+  }
+  if (closeLeaderboardBtn && leaderboardSection) {
+    closeLeaderboardBtn.addEventListener('click', () => {
+      leaderboardSection.style.display = 'none';
     });
   }
 });
