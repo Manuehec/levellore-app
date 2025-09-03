@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LevelLore – AI Comedy & Community</title>
+  <title>LevelLore – AI Comedy & Community</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
     <div class="container">
       <h1 class="logo">LevelLore<span>YT</span></h1>
-      <p class="tagline">Funny AI videos and stories from Bikini Bottom</p>
-      <!-- Visible when not authenticated; hidden after login via JS -->
-      <button id="login-open-btn" class="login-open-button">Login / Register</button>
+      <p class="tagline">Funny AI videos and stories from Bikini Bottom</p>
+      <!-- Visible when not authenticated; hidden via JS after login -->
+      <button id="login-open-btn" class="login-open-button">Login / Register</button>
     </div>
   </header>
 
@@ -26,13 +26,10 @@
       <div class="form-group">
         <h3>Login</h3>
         <input id="login-username" type="text" placeholder="Username" autocomplete="username" />
-
         <div class="password-field">
           <input id="login-password" class="password-input" type="password" placeholder="Password" autocomplete="current-password" />
           <button type="button" id="toggle-login-password" class="toggle-password" aria-label="Passwort anzeigen/ausblenden">👁️</button>
         </div>
-
-        <!-- Remember-me checkbox to persist login token across sessions -->
         <div class="remember-me">
           <input type="checkbox" id="remember-me" />
           <label for="remember-me">Remember me</label>
@@ -46,25 +43,22 @@
       <div class="form-group">
         <h3>Register</h3>
         <input id="register-username" type="text" placeholder="Choose a username" autocomplete="off" />
-
         <div class="password-field">
           <input id="register-password" class="password-input" type="password" placeholder="Choose a password" autocomplete="new-password" />
           <button type="button" id="toggle-register-password" class="toggle-password" aria-label="Passwort anzeigen/ausblenden">👁️</button>
         </div>
-
         <div class="password-field">
           <input id="register-password-confirm" class="password-input" type="password" placeholder="Repeat password" autocomplete="new-password" />
           <button type="button" id="toggle-register-password-confirm" class="toggle-password" aria-label="Passwort anzeigen/ausblenden">👁️</button>
         </div>
-
         <button id="register-btn">Register</button>
       </div>
     </div>
   </section>
 
   <section id="main-section">
+    <!-- User bar (hidden until login) -->
     <div class="user-bar" style="display:none;">
-      <!-- Avatar with upload overlay -->
       <div class="avatar-wrapper">
         <img id="profile-pic" class="avatar" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAT0lEQVR4nO3OMQHAIADAMJh/A3hCFAb29IIjUZA51h7v+W4H/mkVWoVWoVVoFVqFVqFVaBVahVahVWgVWoVWoVVoFVqFVqFVaBVahVahVRz/7AHJNzgsxgAAAABJRU5ErkJggg==" alt="Profile picture" />
         <label for="avatar-input" class="avatar-upload-btn" title="Upload profile picture">📷</label>
@@ -72,12 +66,11 @@
       </div>
       <div class="user-details">
         <span id="welcome-name" class="username">User</span>
-        <span id="level-info" class="level">Level 1</span>
-        <span id="xp-info" class="xp">XP 0</span>
+        <span id="level-info" class="level">Level 1</span>
+        <span id="xp-info" class="xp">XP 0</span>
         <div class="xp-bar"><div id="xp-fill" class="xp-fill"></div></div>
       </div>
-      <!-- Buttons matched by script.js -->
-      <button id="imprint-btn" class="imprint-button">Impressum</button>
+      <!-- Buttons kept (no Impressum here anymore) -->
       <button id="leaderboard-btn" class="leaderboard-button">Leaderboard</button>
       <button id="logout-btn" class="logout-button">Logout</button>
     </div>
@@ -147,8 +140,12 @@
       <button id="close-imprint" class="close-leaderboard">Close</button>
     </section>
 
-    <footer>
-      <p>&copy; <span id="year"></span> LevelLoreYT. All rights reserved.</p>
+    <footer class="site-footer">
+      <div class="footer-bar">
+        <p>&copy; <span id="year"></span> LevelLoreYT. All rights reserved.</p>
+        <!-- Moved here: Impressum button next to © text -->
+        <button id="imprint-btn" class="imprint-button">Impressum</button>
+      </div>
     </footer>
   </section>
 
