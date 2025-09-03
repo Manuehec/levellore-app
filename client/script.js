@@ -37,7 +37,7 @@ const logoutBtn = document.getElementById('logout-btn');
 
 // Leaderboard and remember-me related elements
 const leaderboardBtn = document.getElementById('leaderboard-btn');
-const leaderboardSection = document.getElementById('leaderboard');
+const leaderboardSection = document.getElementById('leaderboard-section');
 const leaderboardContainer = document.getElementById('leaderboard-container');
 const closeLeaderboardBtn = document.getElementById('close-leaderboard');
 const rememberMeCheckbox = document.getElementById('remember-me');
@@ -50,7 +50,7 @@ const loginOpenBtn = document.getElementById('login-open-btn');
 
 // Impressum popup elements
 const impressumLink = document.getElementById('impressum-link');
-const impressumSection = document.getElementById('impressum-popup');
+const impressumSection = document.getElementById('impressum-section');
 const closeImpressumBtn = document.getElementById('close-impressum');
 
 const welcomeNameEl = document.getElementById('welcome-name');
