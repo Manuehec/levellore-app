@@ -87,12 +87,13 @@
     </section>
 
     <!-- Hidden leaderboard section, displayed when the leaderboard button is clicked -->
-    <section id="leaderboard" class="leaderboard-section" style="display:none;">
-      <h2>Leaderboard</h2>
-      <div id="leaderboard-container"></div>
-      <button id="close-leaderboard" class="close-leaderboard">Close</button>
-    </section>
-
+ <div id="leaderboard-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h2>Leaderboard</h2>
+    <ul id="leaderboard-list"></ul>
+    <button id="close-leaderboard-modal" class="close-button">Schließen</button>
+  </div>
+<
     <footer>
       <p>&copy; <span id="year"></span> LevelLoreYT. All rights reserved. |
         <!-- Link to open the Impressum popup instead of navigating away -->
@@ -104,14 +105,31 @@
   <script src="script.js"></script>
 
   <!-- Hidden impressum overlay shown when the Impressum link is clicked -->
-  <section id="impressum-popup" class="impressum-section" style="display:none;">
+ <div id="impressum-modal" class="modal" style="display:none;">
+  <div class="modal-content">
     <h2>Impressum</h2>
-    <p>This website is operated by <strong>LevelLoreYT</strong>.</p>
-    <p>Contact: <a href="mailto:levelloreyt@example.com">levelloreyt@example.com</a></p>
-    <p>Address: Sample Street 1, 47918 Tönisvorst, Germany</p>
-    <p>This fan‑made site is not affiliated with Nickelodeon or any rights holders of SpongeBob SquarePants.</p>
-    <button id="close-impressum" class="close-impressum">Close</button>
-  </section>
+    <p><strong>Angaben gemäß § 5 TMG</strong></p>
+    <p>Niels Friedrichs<br>Inratherstraße 528<br>47803 Krefeld<br>Deutschland</p>
+    <p><strong>Kontakt</strong><br>Telefon: 015752181204<br>E-Mail: <a href="mailto:manubusiness2k@gmail.com">manubusiness2k@gmail.com</a></p>
+    <p><strong>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</strong><br>Niels Friedrichs<br>Inratherstraße 528<br>47803 Krefeld</p>
+    <h3>Haftungsausschluss</h3>
+    <p><strong>Haftung für Inhalte</strong><br>
+      Als Diensteanbieter bin ich gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. 
+      Nach §§ 8 bis 10 TMG bin ich als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen 
+      oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von 
+      Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der 
+      Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werde ich diese Inhalte umgehend entfernen.
+    </p>
+    <p><strong>Haftung für Links</strong><br>
+      Mein Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte ich keinen Einfluss habe. 
+      Deshalb kann ich für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter 
+      oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. 
+      Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch 
+      ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werde ich derartige Links umgehend entfernen.
+    </p>
+    <button id="close-impressum-modal" class="close-button">Schließen</button>
+  </div>
+</div>
 
 
 </body>
