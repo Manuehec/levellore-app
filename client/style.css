@@ -76,6 +76,38 @@
   width: 400px;
 }
 
+/* Impressum pop-up styling (similar to leaderboard) */
+.impressum-section {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 2000;
+  max-width: 90%;
+  width: 400px;
+}
+
+/* Close button for impressum overlay */
+.close-impressum {
+  margin-top: 1rem;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.close-impressum:hover {
+  background-color: #d9534f;
+}
+
 .leaderboard-row {
   display: flex;
   align-items: center;
