@@ -151,7 +151,19 @@ app.post('/api/xp/quiz', authenticate, (req, res) => {
 
 // GET /api/chat
 app.get('/api/chat', authenticate, (req, res) => {
-  res.json(store.messages.slice(-100));
+  // Return the most recent 100 messages. Each message includes the sender's
+  // profilePic so the client can display avatars next to chat messages.
+  const messagesWithAvatars = store.messages.slice(-100).map(msg => {
+    const user = store.users[msg.username];
+    return {
+      id: msg.id,
+      username: msg.username,
+      text: msg.text,
+      timestamp: msg.timestamp,
+      profilePic: user && user.profilePic ? user.profilePic : null,
+    };
+  });
+  res.json(messagesWithAvatars);
 });
 
 // POST /api/chat { text }
@@ -176,6 +188,30 @@ app.post('/api/avatar', authenticate, (req, res) => {
   req.user.profilePic = image;
   saveStore();
   res.json({ profilePic: req.user.profilePic });
+});
+
+// GET /api/leaderboard
+// Returns a list of top users sorted by level and XP (descending). This route is unauthenticated because
+// leaderboard information does not expose sensitive data. Each entry includes the user's profilePic.
+app.get('/api/leaderboard', (req, res) => {
+  const leaderboard = Object.entries(store.users)
+    .map(([username, user]) => {
+      const levelInfo = computeLevel(user.xp);
+      return {
+        username,
+        xp: user.xp,
+        level: levelInfo.level,
+        profilePic: user.profilePic || null,
+      };
+    })
+    .sort((a, b) => {
+      if (b.level === a.level) {
+        return b.xp - a.xp;
+      }
+      return b.level - a.level;
+    })
+    .slice(0, 10);
+  res.json(leaderboard);
 });
 
 // Catch‑all to serve client index for unknown routes (for SPA)
