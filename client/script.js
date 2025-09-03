@@ -48,6 +48,11 @@ const quizSectionEl = document.getElementById('quiz');
 const chatSectionEl = document.getElementById('chat');
 const loginOpenBtn = document.getElementById('login-open-btn');
 
+// Impressum popup elements
+const impressumLink = document.getElementById('impressum-link');
+const impressumSection = document.getElementById('impressum-popup');
+const closeImpressumBtn = document.getElementById('close-impressum');
+
 const welcomeNameEl = document.getElementById('welcome-name');
 const levelInfoEl = document.getElementById('level-info');
 const xpInfoEl = document.getElementById('xp-info');
@@ -175,13 +180,21 @@ loginBtn.addEventListener('click', async () => {
       method: 'POST',
       body: JSON.stringify({ username, password })
     });
-    // Persist token based on remember-me checkbox
+    // Persist token and optionally remember credentials based on remember-me checkbox
     if (rememberMeCheckbox && rememberMeCheckbox.checked) {
+      // Store token persistently and clear any session token
       localStorage.setItem('token', data.token);
       sessionStorage.removeItem('token');
+      // Remember username and password for future prefill
+      localStorage.setItem('rememberUsername', username);
+      localStorage.setItem('rememberPassword', password);
     } else {
+      // Store token only for this session
       sessionStorage.setItem('token', data.token);
       localStorage.removeItem('token');
+      // Clear remembered credentials when not selected
+      localStorage.removeItem('rememberUsername');
+      localStorage.removeItem('rememberPassword');
     }
     await loadUser();
   } catch (err) {
@@ -223,7 +236,8 @@ registerBtn.addEventListener('click', async () => {
 });
 
 logoutBtn.addEventListener('click', () => {
-  localStorage.removeItem('token');
+  // On logout, remove only session token so that persistent tokens remain for remember-me
+  sessionStorage.removeItem('token');
   currentUser = null;
   // Clear chat poller
   if (chatPoller) clearInterval(chatPoller);
@@ -231,8 +245,11 @@ logoutBtn.addEventListener('click', () => {
   showGuestUI();
   loginMessage.textContent = '';
   loginMessage.style.color = '#e74c3c';
-  loginUsername.value = '';
-  loginPassword.value = '';
+  // Prepopulate login fields with remembered credentials if they exist
+  const rememberedUsername = localStorage.getItem('rememberUsername');
+  const rememberedPassword = localStorage.getItem('rememberPassword');
+  loginUsername.value = rememberedUsername || '';
+  loginPassword.value = rememberedPassword || '';
 });
 
 // Avatar upload
@@ -305,7 +322,12 @@ function renderChat(messages) {
     const msgDiv = document.createElement('div');
     msgDiv.className = 'chat-message';
     const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    msgDiv.innerHTML = `<strong>${msg.username}</strong> <span class="time">${time}</span>: ${escapeHtml(msg.text)}`;
+    // If a profile picture is provided for this message, include it
+    let avatarHtml = '';
+    if (msg.profilePic) {
+      avatarHtml = `<img src="${msg.profilePic}" class="chat-avatar" alt=""> `;
+    }
+    msgDiv.innerHTML = `${avatarHtml}<strong>${msg.username}</strong> <span class="time">${time}</span>: ${escapeHtml(msg.text)}`;
     chatMessagesEl.appendChild(msgDiv);
   });
   chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
@@ -430,11 +452,17 @@ async function loadUser() {
 document.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('token') || sessionStorage.getItem('token');
   if (token) {
+    // If there is a stored token (persistent or session), attempt to load user immediately
     loadUser();
-  }
-  // Show guest UI when no token
-  else {
+  } else {
+    // Show guest UI when no token and prefill login form if credentials were remembered
     showGuestUI();
+    const remUser = localStorage.getItem('rememberUsername');
+    const remPass = localStorage.getItem('rememberPassword');
+    if (remUser && remPass) {
+      loginUsername.value = remUser;
+      loginPassword.value = remPass;
+    }
   }
   // Event listener for opening login modal
   if (loginOpenBtn) {
@@ -448,11 +476,23 @@ document.addEventListener('DOMContentLoaded', () => {
     leaderboardBtn.addEventListener('click', async () => {
       try {
         const data = await apiFetch('/api/leaderboard');
+        // Clear container before populating
         leaderboardContainer.innerHTML = '';
         data.forEach((entry, index) => {
-          const div = document.createElement('div');
-          div.textContent = `${index + 1}. ${entry.username} – Lv.${entry.level} (${entry.xp} XP)`;
-          leaderboardContainer.appendChild(div);
+          const row = document.createElement('div');
+          row.className = 'leaderboard-row';
+          // Avatar
+          if (entry.profilePic) {
+            const img = document.createElement('img');
+            img.src = entry.profilePic;
+            img.className = 'leaderboard-avatar';
+            img.alt = '';
+            row.appendChild(img);
+          }
+          const textSpan = document.createElement('span');
+          textSpan.textContent = `${index + 1}. ${entry.username} – Lv.${entry.level} (${entry.xp} XP)`;
+          row.appendChild(textSpan);
+          leaderboardContainer.appendChild(row);
         });
         leaderboardSection.style.display = 'block';
       } catch (err) {
@@ -463,6 +503,19 @@ document.addEventListener('DOMContentLoaded', () => {
   if (closeLeaderboardBtn && leaderboardSection) {
     closeLeaderboardBtn.addEventListener('click', () => {
       leaderboardSection.style.display = 'none';
+    });
+  }
+
+  // Impressum popup logic
+  if (impressumLink && impressumSection) {
+    impressumLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      impressumSection.style.display = 'block';
+    });
+  }
+  if (closeImpressumBtn && impressumSection) {
+    closeImpressumBtn.addEventListener('click', () => {
+      impressumSection.style.display = 'none';
     });
   }
 });
