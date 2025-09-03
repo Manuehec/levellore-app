@@ -616,3 +616,57 @@ footer {
     width: 100%;
   }
 }
+/* ===============================
+Auth UI additions (paste at END of style.css)
+- Eye toggle inside password fields
+- Small tweaks for the login overlay on very small screens
+=============================== */
+
+
+/* Password field wrapper so the eye icon can sit inside the input */
+.password-field {
+position: relative;
+}
+
+
+/* Give the input some right padding so the eye icon doesn't overlap text */
+.password-input {
+width: 100%;
+padding-right: 40px; /* room for the eye button */
+}
+
+
+/* Eye button */
+.toggle-password {
+position: absolute;
+right: 10px;
+top: 50%;
+transform: translateY(-50%);
+background: transparent;
+border: none;
+cursor: pointer;
+font-size: 1.1rem; /* 👁️ size */
+line-height: 1;
+padding: 0;
+color: inherit;
+}
+.toggle-password:focus {
+outline: 2px solid var(--secondary);
+outline-offset: 2px;
+}
+
+
+/* Make sure long forms stay usable on small screens */
+@media (max-width: 420px) {
+.login-container {
+max-width: 95vw;
+padding: 20px;
+}
+.password-input { font-size: 1rem; }
+}
+
+
+/* Optional: improve error message visibility (already exists but ensure contrast) */
+.error-message {
+color: #e74c3c; /* red */
+}
