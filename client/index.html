@@ -11,6 +11,8 @@
     <div class="container">
       <h1 class="logo">LevelLore<span>YT</span></h1>
       <p class="tagline">Funny AI videos and stories from Bikini Bottom</p>
+      <!-- Login open button is visible when the user is not authenticated. It will be hidden after login via JavaScript. -->
+      <button id="login-open-btn" class="login-open-button">Login / Register</button>
     </div>
   </header>
 
@@ -34,62 +36,8 @@
     </div>
   </section>
 
-  <section id="main-section" style="display:none;">
-    <div class="user-bar">
-      <!-- Default avatar uses a simple coloured square (embedded as base64) to avoid external asset dependencies. -->
-      <img id="profile-pic" class="avatar" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAT0lEQVR4nO3OMQHAIADAMJh/A3hCFAb29IIjUZA51h7v+W4H/mkVWoVWoVVoFVqFVqFVaBVahVahVWgVWoVWoVVoFVqFVqFVaBVahVahVRz/7AHJNzgsxgAAAABJRU5ErkJggg==" alt="Profile picture">
-      <div class="user-details">
-        <span id="welcome-name" class="username">User</span>
-        <span id="level-info" class="level">Level 1</span>
-        <span id="xp-info" class="xp">XP 0</span>
-      </div>
-      <input type="file" id="avatar-input" accept="image/*" title="Upload profile picture">
-      <button id="logout-btn" class="logout-button">Logout</button>
-    </div>
-
-    <section class="hero">
-      <div class="overlay">
-        <h2 id="hero-heading">Hello!</h2>
-        <p>Test your knowledge below and chat with the community.</p>
-      </div>
-   <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LevelLore – AI Comedy & Community</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header>
-    <div class="container">
-      <h1 class="logo">LevelLore<span>YT</span></h1>
-      <p class="tagline">Funny AI videos and stories from Bikini Bottom</p>
-    </div>
-  </header>
-
-  <section id="login-section" class="login-section">
-    <div class="login-container">
-      <h2>Welcome!</h2>
-      <p id="login-message" class="error-message"></p>
-      <div class="form-group">
-        <h3>Login</h3>
-        <input id="login-username" type="text" placeholder="Username" autocomplete="username">
-        <input id="login-password" type="password" placeholder="Password" autocomplete="current-password">
-        <button id="login-btn">Login</button>
-      </div>
-      <hr>
-      <div class="form-group">
-        <h3>Register</h3>
-        <input id="register-username" type="text" placeholder="Choose a username" autocomplete="off">
-        <input id="register-password" type="password" placeholder="Choose a password" autocomplete="new-password">
-        <button id="register-btn">Register</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="main-section" style="display:none;">
-    <div class="user-bar">
+  <section id="main-section">
+    <div class="user-bar" style="display:none;">
       <!-- Default avatar uses a simple coloured square (embedded as base64) to avoid external asset dependencies. -->
       <img id="profile-pic" class="avatar" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAT0lEQVR4nO3OMQHAIADAMJh/A3hCFAb29IIjUZA51h7v+W4H/mkVWoVWoVVoFVqFVqFVaBVahVahVWgVWoVWoVVoFVqFVqFVaBVahVahVRz/7AHJNzgsxgAAAABJRU5ErkJggg==" alt="Profile picture">
       <div class="user-details">
@@ -108,7 +56,7 @@
       </div>
     </section>
 
-    <section id="quiz" class="quiz-section">
+    <section id="quiz" class="quiz-section" style="display:none;">
       <h2>Daily SpongeBob Quiz</h2>
       <div class="quiz-box">
         <p id="question" class="question">Loading…</p>
@@ -118,36 +66,7 @@
       <p class="disclaimer">This fan‑made quiz is not affiliated with Nickelodeon or any rights holders.</p>
     </section>
 
-    <section id="chat" class="chat-section">
-      <h2>Chat Room</h2>
-      <div id="chat-messages" class="chat-messages"></div>
-      <div class="chat-input-row">
-        <input id="chat-input" type="text" placeholder="Write a message…" autocomplete="off">
-        <button id="send-btn" class="send-button">Send</button>
-      </div>
-    </section>
-
-    <footer>
-      <p>&copy; <span id="year"></span> LevelLoreYT. All rights reserved.</p>
-    </footer>
-  </section>
-
-  <script src="script.js"></script>
-</body>
-</html>
- </section>
-
-    <section id="quiz" class="quiz-section">
-      <h2>Daily SpongeBob Quiz</h2>
-      <div class="quiz-box">
-        <p id="question" class="question">Loading…</p>
-        <ul id="options" class="options"></ul>
-        <div id="feedback" class="feedback"></div>
-      </div>
-      <p class="disclaimer">This fan‑made quiz is not affiliated with Nickelodeon or any rights holders.</p>
-    </section>
-
-    <section id="chat" class="chat-section">
+    <section id="chat" class="chat-section" style="display:none;">
       <h2>Chat Room</h2>
       <div id="chat-messages" class="chat-messages"></div>
       <div class="chat-input-row">
