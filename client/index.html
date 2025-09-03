@@ -59,9 +59,11 @@
         <div class="xp-bar">
           <div id="xp-fill" class="xp-fill"></div>
         </div>
+        <!-- Daily login button: shown when user hasn't claimed daily XP yet -->
+        <button id="daily-login-btn" class="daily-login-btn" style="display:none;">Daily Log&nbsp;In</button>
       </div>
-      <!-- Impressum and leaderboard buttons -->
-      <button id="impressum-btn" class="impressum-button">Impressum</button>
+      <!-- Leaderboard and imprint buttons -->
+      <button id="imprint-btn" class="imprint-button">Impressum</button>
       <button id="leaderboard-btn" class="leaderboard-button">Leaderboard</button>
       <button id="logout-btn" class="logout-button">Logout</button>
     </div>
@@ -106,14 +108,8 @@
 
   <script src="script.js"></script>
 
-      <!-- Daily XP reward message; hidden until reward is available -->
-      <div id="daily-xp-message" class="daily-xp-message" style="display:none;">
-        <span>You have a daily XP reward available!</span>
-        <button id="claim-daily-xp-btn" class="claim-daily-xp-btn">Claim XP</button>
-      </div>
-
-      <!-- Impressum popup section (hidden by default) -->
-      <section id="impressum-popup" class="impressum-section" style="display:none;">
+      <!-- Hidden imprint section (identical styling to leaderboard) -->
+      <section id="imprint-section" class="leaderboard-section" style="display:none;">
         <h2>Impressum</h2>
         <p><strong>Angaben gemäß § 5 TMG</strong></p>
         <p>
@@ -138,7 +134,7 @@
         <p><strong>Haftung für Links</strong><br>
           Mein Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte ich keinen Einfluss habe. Deshalb kann ich für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werde ich derartige Links umgehend entfernen.
         </p>
-        <button id="close-impressum" class="close-impressum">Schließen</button>
+        <button id="close-imprint" class="close-leaderboard">Close</button>
       </section>
 
 
