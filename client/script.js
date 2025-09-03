@@ -44,6 +44,10 @@ const leaderboardContainer = document.getElementById('leaderboard-container');
 const closeLeaderboardBtn = document.getElementById('close-leaderboard');
 const rememberMeCheckbox = document.getElementById('remember-me');
 
+// Daily XP reward elements
+const dailyXpMessage = document.getElementById('daily-xp-message');
+const claimDailyXpBtn = document.getElementById('claim-daily-xp-btn');
+
 // Additional UI elements for improved layout
 const userBar = document.querySelector('.user-bar');
 const quizSectionEl = document.getElementById('quiz');
@@ -267,6 +271,10 @@ avatarInput.addEventListener('change', async (e) => {
         body: JSON.stringify({ image: base64 })
       });
       profilePicEl.src = data.profilePic;
+      // Persist profile picture on currentUser so it doesn’t reset when XP updates
+      if (currentUser) {
+        currentUser.profilePic = data.profilePic;
+      }
     } catch (err) {
       console.error('Avatar upload failed');
     }
@@ -425,11 +433,16 @@ async function loadUser() {
   try {
     const data = await apiFetch('/api/user');
     currentUser = data;
-    // Award daily login XP
-    await apiFetch('/api/xp/daily-login', { method: 'POST' }).catch(() => {});
-    // Refresh user data after login XP update
-    const updated = await apiFetch('/api/user');
-    currentUser = updated;
+    // Determine if the user has unclaimed daily login XP and show the reward message.
+    const today = new Date().toISOString().slice(0, 10);
+    if (dailyXpMessage) {
+      if (currentUser.lastLoginDate !== today) {
+        // Show claim message if daily XP not yet claimed
+        dailyXpMessage.style.display = 'flex';
+      } else {
+        dailyXpMessage.style.display = 'none';
+      }
+    }
     // Show user‑specific sections and hide login overlay
     loginSection.style.display = 'none';
     mainSection.style.display = 'block';
@@ -508,16 +521,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Impressum popup logic
-  if (impressumLink && impressumSection) {
-    impressumLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      impressumSection.style.display = 'block';
-    });
-  }
-  if (closeImpressumBtn && impressumSection) {
-    closeImpressumBtn.addEventListener('click', () => {
-      impressumSection.style.display = 'none';
+  // The Impressum link now navigates to a separate page (impressum.html). No popup handling required.
+
+  // Daily XP reward claim logic
+  if (claimDailyXpBtn && dailyXpMessage) {
+    claimDailyXpBtn.addEventListener('click', async () => {
+      try {
+        // Call API to award daily login XP when the user explicitly claims it
+        const res = await apiFetch('/api/xp/daily-login', { method: 'POST' });
+        if (res && typeof res.xp === 'number' && typeof res.level === 'number') {
+          // Update currentUser fields and UI
+          currentUser.xp = res.xp;
+          currentUser.level = res.level;
+          // Update lastLoginDate to today to prevent multiple claims
+          currentUser.lastLoginDate = new Date().toISOString().slice(0, 10);
+          updateUserInfo();
+        }
+      } catch (err) {
+        console.error('Failed to claim daily XP');
+      } finally {
+        // Hide the reward message after attempting claim
+        dailyXpMessage.style.display = 'none';
+      }
     });
   }
 });
