@@ -55,6 +55,38 @@
   color: #fff;
 }
 
+/* Imprint button styling matches leaderboard button */
+.imprint-button {
+  margin-left: 0.5rem;
+  background-color: var(--secondary);
+  border: none;
+  color: #333;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+.imprint-button:hover {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+/* Daily login button styling */
+.daily-login-btn {
+  margin-top: 0.5rem;
+  padding: 10px 20px;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.daily-login-btn:hover {
+  background-color: #27ae60;
+}
+
 .close-leaderboard {
   margin-top: 0.5rem;
 }
