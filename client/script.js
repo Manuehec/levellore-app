@@ -36,6 +36,8 @@ const registerBtn = document.getElementById('register-btn');
 const logoutBtn = document.getElementById('logout-btn');
 
 // Leaderboard and remember-me related elements
+// NOTE: Use consistent variable names and match the element IDs defined in index.html.
+// The leaderboard overlay uses id="leaderboard-section" in index.html.  
 const leaderboardBtn = document.getElementById('leaderboard-btn');
 const leaderboardSection = document.getElementById('leaderboard-section');
 const leaderboardContainer = document.getElementById('leaderboard-container');
@@ -50,7 +52,7 @@ const loginOpenBtn = document.getElementById('login-open-btn');
 
 // Impressum popup elements
 const impressumLink = document.getElementById('impressum-link');
-const impressumSection = document.getElementById('impressum-section');
+const impressumSection = document.getElementById('impressum-popup');
 const closeImpressumBtn = document.getElementById('close-impressum');
 
 const welcomeNameEl = document.getElementById('welcome-name');
