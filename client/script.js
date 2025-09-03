@@ -19,6 +19,8 @@ async function apiFetch(endpoint, options = {}) {
   if (!res.ok) {
     throw res;
   }
+  
+
   return res.json();
 }
 
@@ -41,6 +43,10 @@ const profilePicEl = document.getElementById('profile-pic');
 const avatarInput = document.getElementById('avatar-input');
 
 const heroHeading = document.getElementById('hero-heading');
+const userBar = document.querySelector('.user-bar');
+const quizSectionEl = document.getElementById('quiz');
+const chatSectionEl = document.getElementById('chat');
+const loginOpenBtn = document.getElementById('login-open-btn');
 
 // Quiz elements
 const questionEl = document.getElementById('question');
