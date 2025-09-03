@@ -38,18 +38,21 @@
 }
 
 /* Impressum button styling in footer. Mimic leaderboard button spacing */
+/* Impressum button styling to match leaderboard button */
 .impressum-button {
   margin-left: 0.5rem;
-  background: none;
+  background-color: var(--secondary);
   border: none;
-  color: var(--primary);
-  text-decoration: underline;
+  color: #333;
+  padding: 6px 12px;
+  border-radius: 4px;
   cursor: pointer;
-  font: inherit;
-  padding: 0;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
 }
 .impressum-button:hover {
-  color: var(--accent);
+  background-color: var(--accent);
+  color: #fff;
 }
 
 .close-leaderboard {
@@ -166,6 +169,37 @@
   border-radius: 50%;
   object-fit: cover;
   margin-right: 8px;
+}
+
+/* Avatar upload wrapper and overlay */
+.avatar-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+.avatar-upload-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: var(--secondary);
+  color: #333;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.avatar-upload-btn:hover {
+  background-color: var(--accent);
+  color: #fff;
+}
+#avatar-input {
+  display: none;
 }
 /*
  * Styles for LevelLore community site with backend integration. Reuses
