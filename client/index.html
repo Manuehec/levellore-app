@@ -43,8 +43,14 @@
 
   <section id="main-section">
     <div class="user-bar" style="display:none;">
-      <!-- Default avatar uses a simple coloured square (embedded as base64) to avoid external asset dependencies. -->
-      <img id="profile-pic" class="avatar" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAT0lEQVR4nO3OMQHAIADAMJh/A3hCFAb29IIjUZA51h7v+W4H/mkVWoVWoVVoFVqFVqFVaBVahVahVWgVWoVWoVVoFVqFVqFVaBVahVahVRz/7AHJNzgsxgAAAABJRU5ErkJggg==" alt="Profile picture">
+      <!-- Avatar with upload overlay -->
+      <div class="avatar-wrapper">
+        <!-- Default avatar uses a simple coloured square (embedded as base64) to avoid external asset dependencies. -->
+        <img id="profile-pic" class="avatar" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAT0lEQVR4nO3OMQHAIADAMJh/A3hCFAb29IIjUZA51h7v+W4H/mkVWoVWoVVoFVqFVqFVaBVahVahVWgVWoVWoVVoFVqFVqFVaBVahVahVRz/7AHJNzgsxgAAAABJRU5ErkJggg==" alt="Profile picture">
+        <!-- Upload button overlay on avatar -->
+        <label for="avatar-input" class="avatar-upload-btn" title="Upload profile picture">📷</label>
+        <input type="file" id="avatar-input" accept="image/*">
+      </div>
       <div class="user-details">
         <span id="welcome-name" class="username">User</span>
         <span id="level-info" class="level">Level 1</span>
@@ -54,8 +60,8 @@
           <div id="xp-fill" class="xp-fill"></div>
         </div>
       </div>
-      <input type="file" id="avatar-input" accept="image/*" title="Upload profile picture">
-      <!-- Button to open the leaderboard -->
+      <!-- Impressum and leaderboard buttons -->
+      <button id="impressum-btn" class="impressum-button">Impressum</button>
       <button id="leaderboard-btn" class="leaderboard-button">Leaderboard</button>
       <button id="logout-btn" class="logout-button">Logout</button>
     </div>
@@ -94,10 +100,7 @@
     </section>
 
         <footer>
-          <p>&copy; <span id="year"></span> LevelLoreYT. All rights reserved. |
-            <!-- Use a button instead of a hyperlink for the Impressum so it behaves like a modal trigger. -->
-            <button id="impressum-btn" class="impressum-button" type="button">Impressum</button>
-          </p>
+          <p>&copy; <span id="year"></span> LevelLoreYT. All rights reserved.</p>
         </footer>
   </section>
 
