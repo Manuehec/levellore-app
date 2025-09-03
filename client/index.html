@@ -24,6 +24,11 @@
         <h3>Login</h3>
         <input id="login-username" type="text" placeholder="Username" autocomplete="username">
         <input id="login-password" type="password" placeholder="Password" autocomplete="current-password">
+        <!-- Remember-me checkbox to persist login token across sessions -->
+        <div class="remember-me">
+          <input type="checkbox" id="remember-me">
+          <label for="remember-me">Remember me</label>
+        </div>
         <button id="login-btn">Login</button>
       </div>
       <hr>
@@ -44,8 +49,14 @@
         <span id="welcome-name" class="username">User</span>
         <span id="level-info" class="level">Level 1</span>
         <span id="xp-info" class="xp">XP 0</span>
+        <!-- XP progress bar filled proportionally by script.js -->
+        <div class="xp-bar">
+          <div id="xp-fill" class="xp-fill"></div>
+        </div>
       </div>
       <input type="file" id="avatar-input" accept="image/*" title="Upload profile picture">
+      <!-- Button to open the leaderboard -->
+      <button id="leaderboard-btn" class="leaderboard-button">Leaderboard</button>
       <button id="logout-btn" class="logout-button">Logout</button>
     </div>
 
@@ -75,12 +86,22 @@
       </div>
     </section>
 
+    <!-- Hidden leaderboard section, displayed when the leaderboard button is clicked -->
+    <section id="leaderboard" class="leaderboard-section" style="display:none;">
+      <h2>Leaderboard</h2>
+      <div id="leaderboard-container"></div>
+      <button id="close-leaderboard" class="close-leaderboard">Close</button>
+    </section>
+
     <footer>
-      <p>&copy; <span id="year"></span> LevelLoreYT. All rights reserved.</p>
+      <p>&copy; <span id="year"></span> LevelLoreYT. All rights reserved. |
+        <a href="impressum.html">Impressum</a>
+      </p>
     </footer>
   </section>
 
   <script src="script.js"></script>
+
+
 </body>
-</html>
 </html>
