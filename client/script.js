@@ -55,7 +55,8 @@ const chatSectionEl = document.getElementById('chat');
 const loginOpenBtn = document.getElementById('login-open-btn');
 
 // Impressum popup elements
-const impressumLink = document.getElementById('impressum-link');
+// Use a button (impressum-btn) to trigger the Impressum popup instead of an anchor.  This avoids navigation issues.
+const impressumBtn = document.getElementById('impressum-btn');
 const impressumSection = document.getElementById('impressum-popup');
 const closeImpressumBtn = document.getElementById('close-impressum');
 
@@ -521,7 +522,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // The Impressum link now navigates to a separate page (impressum.html). No popup handling required.
+  // Impressum popup logic
+  if (impressumBtn && impressumSection && closeImpressumBtn) {
+    impressumBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      impressumSection.style.display = 'block';
+    });
+    closeImpressumBtn.addEventListener('click', () => {
+      impressumSection.style.display = 'none';
+    });
+  }
 
   // Daily XP reward claim logic
   if (claimDailyXpBtn && dailyXpMessage) {
