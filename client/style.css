@@ -37,7 +37,25 @@
   margin-left: 0.5rem;
 }
 
-/* Imprint button styling (kept; old .impressum-button removed) */
+/* Impressum button styling in footer. Mimic leaderboard button spacing */
+/* Impressum button styling to match leaderboard button */
+.impressum-button {
+  margin-left: 0.5rem;
+  background-color: var(--secondary);
+  border: none;
+  color: #333;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+.impressum-button:hover {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+/* Imprint button styling matches leaderboard button */
 .imprint-button {
   margin-left: 0.5rem;
   background-color: var(--secondary);
@@ -57,13 +75,15 @@
 /* Daily login button styling */
 .daily-login-btn {
   margin-top: 0.5rem;
-  padding: 10px 20px;
+  /* Make the button large and prominent */
+  padding: 14px 28px;
   background-color: #2ecc71;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 .daily-login-btn:hover {
   background-color: #27ae60;
@@ -93,7 +113,7 @@
   vertical-align: middle;
 }
 
-/* Leaderboard pop-up styling (modal) */
+/* Leaderboard pop-up styling */
 .leaderboard-section {
   position: fixed;
   top: 50%;
@@ -108,7 +128,37 @@
   width: 400px;
 }
 
-/* === Old Impressum modal styles removed: .impressum-section, .close-impressum === */
+/* Impressum pop-up styling (similar to leaderboard) */
+.impressum-section {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 2000;
+  max-width: 90%;
+  width: 400px;
+}
+
+/* Close button for impressum overlay */
+.close-impressum {
+  margin-top: 1rem;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.close-impressum:hover {
+  background-color: #d9534f;
+}
 
 /* Daily XP reward message styling */
 .daily-xp-message {
@@ -185,7 +235,6 @@
 #avatar-input {
   display: none;
 }
-
 /*
  * Styles for LevelLore community site with backend integration. Reuses
  * colour palette and components from earlier versions.
@@ -254,7 +303,7 @@ header {
   color: #fff;
 }
 
-/* Login section overlay */
+/* Login section overlay: hidden by default until opened via button. */
 .login-section {
   display: none; /* hidden initially */
   position: fixed;
@@ -565,64 +614,5 @@ footer {
   .chat-input-row,
   .quiz-box {
     width: 100%;
-  }
-}
-
-/* ==== Neues Impressum Popup (responsive) ==== */
-.imprint-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  display: none;              /* toggled via JS */
-  align-items: center;
-  justify-content: center;
-  z-index: 3000;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.imprint-content {
-  background: #fff;
-  padding: 20px;
-  width: 100%;
-  max-width: 800px;           /* cap width on large screens */
-  max-height: 90vh;           /* never taller than viewport */
-  overflow-y: auto;           /* scroll when content is long */
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-  font-size: 1rem;
-  line-height: 1.5;
-  animation: fadeIn 0.3s ease;
-}
-
-.close-imprint-btn {
-  margin-top: 20px;
-  padding: 10px 15px;
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  transition: background 0.2s;
-}
-.close-imprint-btn:hover {
-  background: #d9534f;
-}
-
-/* Fade-in animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-/* Mobile tweaks for imprint content */
-@media (max-width: 600px) {
-  .imprint-content {
-    padding: 15px;
-    font-size: 0.95rem;
   }
 }
