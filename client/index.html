@@ -95,12 +95,23 @@
 
     <footer>
       <p>&copy; <span id="year"></span> LevelLoreYT. All rights reserved. |
-        <a href="impressum.html">Impressum</a>
+        <!-- Link to open the Impressum popup instead of navigating away -->
+        <a href="#" id="impressum-link">Impressum</a>
       </p>
     </footer>
   </section>
 
   <script src="script.js"></script>
+
+  <!-- Hidden impressum overlay shown when the Impressum link is clicked -->
+  <section id="impressum-popup" class="impressum-section" style="display:none;">
+    <h2>Impressum</h2>
+    <p>This website is operated by <strong>LevelLoreYT</strong>.</p>
+    <p>Contact: <a href="mailto:levelloreyt@example.com">levelloreyt@example.com</a></p>
+    <p>Address: Sample Street 1, 47918 Tönisvorst, Germany</p>
+    <p>This fan‑made site is not affiliated with Nickelodeon or any rights holders of SpongeBob SquarePants.</p>
+    <button id="close-impressum" class="close-impressum">Close</button>
+  </section>
 
 
 </body>
