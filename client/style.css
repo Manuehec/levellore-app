@@ -108,6 +108,37 @@
   background-color: #d9534f;
 }
 
+/* Daily XP reward message styling */
+.daily-xp-message {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background-color: #fff;
+  color: #333;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.claim-daily-xp-btn {
+  background-color: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.claim-daily-xp-btn:hover {
+  background-color: #d9534f;
+}
+
 .leaderboard-row {
   display: flex;
   align-items: center;
