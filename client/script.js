@@ -44,9 +44,8 @@ const leaderboardContainer = document.getElementById('leaderboard-container');
 const closeLeaderboardBtn = document.getElementById('close-leaderboard');
 const rememberMeCheckbox = document.getElementById('remember-me');
 
-// Daily XP reward elements
-const dailyXpMessage = document.getElementById('daily-xp-message');
-const claimDailyXpBtn = document.getElementById('claim-daily-xp-btn');
+// Daily login button
+const dailyLoginBtn = document.getElementById('daily-login-btn');
 
 // Additional UI elements for improved layout
 const userBar = document.querySelector('.user-bar');
@@ -54,11 +53,10 @@ const quizSectionEl = document.getElementById('quiz');
 const chatSectionEl = document.getElementById('chat');
 const loginOpenBtn = document.getElementById('login-open-btn');
 
-// Impressum popup elements
-// Use a button (impressum-btn) to trigger the Impressum popup instead of an anchor.  This avoids navigation issues.
-const impressumBtn = document.getElementById('impressum-btn');
-const impressumSection = document.getElementById('impressum-popup');
-const closeImpressumBtn = document.getElementById('close-impressum');
+// Imprint popup elements (styled the same as leaderboard)
+const imprintBtn = document.getElementById('imprint-btn');
+const imprintSection = document.getElementById('imprint-section');
+const closeImprintBtn = document.getElementById('close-imprint');
 
 const welcomeNameEl = document.getElementById('welcome-name');
 const levelInfoEl = document.getElementById('level-info');
@@ -434,27 +432,36 @@ async function loadUser() {
   try {
     const data = await apiFetch('/api/user');
     currentUser = data;
-    // Determine if the user has unclaimed daily login XP and show the reward message.
+    // Determine if the user has unclaimed daily login XP and show the daily login button
     const today = new Date().toISOString().slice(0, 10);
-    if (dailyXpMessage) {
+    if (dailyLoginBtn) {
       if (currentUser.lastLoginDate !== today) {
-        // Show claim message if daily XP not yet claimed
-        dailyXpMessage.style.display = 'flex';
+        // Show the button if daily XP not yet claimed
+        dailyLoginBtn.style.display = 'block';
+        dailyLoginBtn.disabled = false;
       } else {
-        dailyXpMessage.style.display = 'none';
+        // Hide the button if already claimed
+        dailyLoginBtn.style.display = 'none';
       }
     }
     // Show user‑specific sections and hide login overlay
     loginSection.style.display = 'none';
     mainSection.style.display = 'block';
-    // Show user bar, quiz and chat
+    // Show user bar and chat
     if (userBar) userBar.style.display = 'flex';
-    if (quizSectionEl) quizSectionEl.style.display = 'block';
     if (chatSectionEl) chatSectionEl.style.display = 'block';
+    // Display quiz only if the user hasn't answered today's question
+    if (quizSectionEl) {
+      if (currentUser.lastQuizDate === today) {
+        quizSectionEl.style.display = 'none';
+      } else {
+        quizSectionEl.style.display = 'block';
+        loadDailyQuiz();
+      }
+    }
     // Hide login button
     if (loginOpenBtn) loginOpenBtn.style.display = 'none';
     updateUserInfo();
-    loadDailyQuiz();
     await loadChat();
     startChatPolling();
   } catch (err) {
@@ -522,36 +529,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Impressum popup logic
-  if (impressumBtn && impressumSection && closeImpressumBtn) {
-    impressumBtn.addEventListener('click', (e) => {
+  // Imprint popup logic
+  if (imprintBtn && imprintSection && closeImprintBtn) {
+    imprintBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      impressumSection.style.display = 'block';
+      imprintSection.style.display = 'block';
     });
-    closeImpressumBtn.addEventListener('click', () => {
-      impressumSection.style.display = 'none';
+    closeImprintBtn.addEventListener('click', () => {
+      imprintSection.style.display = 'none';
     });
   }
 
-  // Daily XP reward claim logic
-  if (claimDailyXpBtn && dailyXpMessage) {
-    claimDailyXpBtn.addEventListener('click', async () => {
+  // Daily login button click logic
+  if (dailyLoginBtn) {
+    dailyLoginBtn.addEventListener('click', async () => {
+      dailyLoginBtn.disabled = true;
       try {
-        // Call API to award daily login XP when the user explicitly claims it
         const res = await apiFetch('/api/xp/daily-login', { method: 'POST' });
         if (res && typeof res.xp === 'number' && typeof res.level === 'number') {
-          // Update currentUser fields and UI
           currentUser.xp = res.xp;
           currentUser.level = res.level;
-          // Update lastLoginDate to today to prevent multiple claims
           currentUser.lastLoginDate = new Date().toISOString().slice(0, 10);
           updateUserInfo();
         }
       } catch (err) {
-        console.error('Failed to claim daily XP');
+        console.error('Failed to claim daily login XP');
       } finally {
-        // Hide the reward message after attempting claim
-        dailyXpMessage.style.display = 'none';
+        dailyLoginBtn.style.display = 'none';
+        dailyLoginBtn.disabled = false;
       }
     });
   }
