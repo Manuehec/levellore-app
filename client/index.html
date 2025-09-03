@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LevelLore – AI Comedy & Community</title>
+  <title>LevelLore – AI Comedy & Community</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
     <div class="container">
       <h1 class="logo">LevelLore<span>YT</span></h1>
-      <p class="tagline">Funny AI videos and stories from Bikini Bottom</p>
-      <!-- Login open button is visible when the user is not authenticated. -->
-      <button id="login-open-btn" class="login-open-button">Login / Register</button>
+      <p class="tagline">Funny AI videos and stories from Bikini Bottom</p>
+      <!-- Login open button is visible when the user is not authenticated. It will be hidden after login via JavaScript. -->
+      <button id="login-open-btn" class="login-open-button">Login / Register</button>
     </div>
   </header>
 
@@ -24,7 +24,7 @@
         <h3>Login</h3>
         <input id="login-username" type="text" placeholder="Username" autocomplete="username">
         <input id="login-password" type="password" placeholder="Password" autocomplete="current-password">
-        <!-- Remember-me checkbox -->
+        <!-- Remember-me checkbox to persist login token across sessions -->
         <div class="remember-me">
           <input type="checkbox" id="remember-me">
           <label for="remember-me">Remember me</label>
@@ -43,29 +43,32 @@
 
   <section id="main-section">
     <div class="user-bar" style="display:none;">
-      <!-- Avatar with upload -->
+      <!-- Avatar with upload overlay -->
       <div class="avatar-wrapper">
-        <img id="profile-pic" class="avatar" src="data:image/png;base64,iVBOR..." alt="Profile picture">
+        <!-- Default avatar uses a simple coloured square (embedded as base64) to avoid external asset dependencies. -->
+        <img id="profile-pic" class="avatar" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAT0lEQVR4nO3OMQHAIADAMJh/A3hCFAb29IIjUZA51h7v+W4H/mkVWoVWoVVoFVqFVqFVaBVahVahVWgVWoVWoVVoFVqFVqFVaBVahVahVRz/7AHJNzgsxgAAAABJRU5ErkJggg==" alt="Profile picture">
+        <!-- Upload button overlay on avatar -->
         <label for="avatar-input" class="avatar-upload-btn" title="Upload profile picture">📷</label>
         <input type="file" id="avatar-input" accept="image/*">
       </div>
       <div class="user-details">
         <span id="welcome-name" class="username">User</span>
-        <span id="level-info" class="level">Level 1</span>
-        <span id="xp-info" class="xp">XP 0</span>
+        <span id="level-info" class="level">Level 1</span>
+        <span id="xp-info" class="xp">XP 0</span>
+        <!-- XP progress bar filled proportionally by script.js -->
         <div class="xp-bar">
           <div id="xp-fill" class="xp-fill"></div>
         </div>
-        <!-- Daily login button -->
-        <button id="daily-login-btn" class="daily-login-btn" style="display:none;">
-          Daily Log&nbsp;In
-        </button>
       </div>
-      <!-- Buttons -->
+      <!-- Leaderboard and imprint buttons -->
       <button id="imprint-btn" class="imprint-button">Impressum</button>
       <button id="leaderboard-btn" class="leaderboard-button">Leaderboard</button>
       <button id="logout-btn" class="logout-button">Logout</button>
     </div>
+
+    <!-- Daily login button moved outside of user bar for prominence.  
+         It is displayed after the hero section so that it appears near the top of the main section. -->
+    <button id="daily-login-btn" class="daily-login-btn" style="display:none;">Daily Log&nbsp;In</button>
 
     <section class="hero">
       <div class="overlay">
@@ -81,7 +84,7 @@
         <ul id="options" class="options"></ul>
         <div id="feedback" class="feedback"></div>
       </div>
-      <p class="disclaimer">This fan-made quiz is not affiliated with Nickelodeon or any rights holders.</p>
+      <p class="disclaimer">This fan‑made quiz is not affiliated with Nickelodeon or any rights holders.</p>
     </section>
 
     <section id="chat" class="chat-section" style="display:none;">
@@ -93,56 +96,49 @@
       </div>
     </section>
 
-    <!-- Hidden leaderboard -->
+    <!-- Hidden leaderboard section, displayed when the leaderboard button is clicked -->
     <section id="leaderboard-section" class="leaderboard-section" style="display:none;">
       <h2>Leaderboard</h2>
       <div id="leaderboard-container"></div>
       <button id="close-leaderboard" class="close-leaderboard">Close</button>
     </section>
 
-    <!-- Hidden imprint -->
-    <section id="imprint-section" class="leaderboard-section" style="display:none;">
-      <h2>Impressum</h2>
-      <p><strong>Angaben gemäß § 5 TMG</strong></p>
-      <p>
-        Niels&nbsp;Friedrichs<br>
-        Inratherstraße&nbsp;528<br>
-        47803&nbsp;Krefeld<br>
-        Deutschland
-      </p>
-      <p><strong>Kontakt</strong><br>
-        Telefon: 0157&nbsp;52181204<br>
-        E-Mail: <a href="mailto:manubusiness2k@gmail.com">manubusiness2k@gmail.com</a>
-      </p>
-      <p><strong>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</strong><br>
-        Niels&nbsp;Friedrichs<br>
-        Inratherstraße&nbsp;528<br>
-        47803&nbsp;Krefeld
-      </p>
-      <h3>Haftungsausschluss</h3>
-      <p><strong>Haftung für Inhalte</strong><br>
-        Als Diensteanbieter bin ich gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. 
-        Nach §§ 8 bis 10 TMG bin ich als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen 
-        oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen 
-        nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. 
-        Bei Bekanntwerden von entsprechenden Rechtsverletzungen werde ich diese Inhalte umgehend entfernen.
-      </p>
-      <p><strong>Haftung für Links</strong><br>
-        Mein Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte ich keinen Einfluss habe. 
-        Deshalb kann ich für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter 
-        oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. 
-        Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch 
-        ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werde ich derartige Links umgehend entfernen.
-      </p>
-      <button id="close-imprint" class="close-leaderboard">Close</button>
-    </section>
-
-    <footer>
-      <p>&copy; <span id="year"></span> LevelLoreYT. All rights reserved.</p>
-    </footer>
+        <footer>
+          <p>&copy; <span id="year"></span> LevelLoreYT. All rights reserved.</p>
+        </footer>
   </section>
 
-  <!-- Script immer zuletzt -->
   <script src="script.js"></script>
+
+      <!-- Hidden imprint section (identical styling to leaderboard) -->
+      <section id="imprint-section" class="leaderboard-section" style="display:none;">
+        <h2>Impressum</h2>
+        <p><strong>Angaben gemäß § 5 TMG</strong></p>
+        <p>
+          Niels&nbsp;Friedrichs<br>
+          Inratherstraße&nbsp;528<br>
+          47803&nbsp;Krefeld<br>
+          Deutschland
+        </p>
+        <p><strong>Kontakt</strong><br>
+          Telefon: 0157&nbsp;52181204<br>
+          E-Mail: <a href="mailto:manubusiness2k@gmail.com">manubusiness2k@gmail.com</a>
+        </p>
+        <p><strong>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</strong><br>
+          Niels&nbsp;Friedrichs<br>
+          Inratherstraße&nbsp;528<br>
+          47803&nbsp;Krefeld
+        </p>
+        <h3>Haftungsausschluss</h3>
+        <p><strong>Haftung für Inhalte</strong><br>
+          Als Diensteanbieter bin ich gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG bin ich als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werde ich diese Inhalte umgehend entfernen.
+        </p>
+        <p><strong>Haftung für Links</strong><br>
+          Mein Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte ich keinen Einfluss habe. Deshalb kann ich für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werde ich derartige Links umgehend entfernen.
+        </p>
+        <button id="close-imprint" class="close-leaderboard">Close</button>
+      </section>
+
+
 </body>
 </html>
