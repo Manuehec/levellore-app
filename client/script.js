@@ -1,5 +1,5 @@
 /*
- * Front-end logic for LevelLore app.
+ * The Front-end logic for LevelLore app.
  *
  * Handles user registration/login, fetching user info,
  * daily XP operations, profile picture upload, quiz logic,
